@@ -3,7 +3,7 @@
 ## declare an array of evolutions
 declare -a evolutions=(
     "11_hat" "31_properties" "32_relationships"
-    "33_staticData" "35_sampleCollections")
+    "33_staticData" "35_sampleCollections", "41_authentication")
 
 jdbcurl=$JDBCURL
 dbuser=$DBUSER

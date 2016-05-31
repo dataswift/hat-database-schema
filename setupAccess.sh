@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Setup HAT access
+echo "Setting up HAT access"
+HAT_OWNER=${HAT_OWNER:-'bobtheplumber'}
+HAT_OWNER_ID=${HAT_OWNER_ID:-5974832d-2dc1-4f49-adf1-c6d8bc790274}
+HAT_OWNER_NAME=${HAT_OWNER_NAME:-'Bob'}
+HAT_OWNER_PASSWORD=${HAT_OWNER_PASSWORD:-'$2a$08$vXWZ7MvO0IJu/LvZoMGj3udxKFKTx7a9weDA11zz7wvfIB8qI9JrC'}    # by default hash for pa55w0rd
+
+HAT_PLATFORM=${HAT_PLATFORM:-'hatdex.org'}
+HAT_PLATFORM_ID=${HAT_PLATFORM_ID:-47dffdfd-55e8-4575-836c-151e30bb5a50}
+HAT_PLATFORM_NAME=${HAT_PLATFORM_NAME:-'hatdex'}
+HAT_PLATFORM_PASSWORD_HASH=${HAT_PLATFORM_PASSWORD_HASH:-'$2a$10$VTnzSsdslsrlj1gVOGZQ7O3ze4KML/qG1stH8yC/ksFPTx8NoF0Ri'}
+
+sed -e "s;%HAT_OWNER%;$HAT_OWNER;g"\
+  -e "s;%HAT_OWNER_ID%;$HAT_OWNER_ID;g"\
+  -e "s;%HAT_OWNER_NAME%;$HAT_OWNER_NAME;g"\
+  -e "s;%HAT_OWNER_PASSWORD%;$HAT_OWNER_PASSWORD;g"\
+  -e "s;%HAT_PLATFORM%;$HAT_PLATFORM;g"\
+  -e "s;%HAT_PLATFORM_ID%;$HAT_PLATFORM_ID;g"\
+  -e "s;%HAT_PLATFORM_NAME%;$HAT_PLATFORM_NAME;g"\
+  -e "s;%HAT_PLATFORM_PASSWORD_HASH%;$HAT_PLATFORM_PASSWORD_HASH;g"\
+  41_authentication.sql.template > 41_authentication.sql
