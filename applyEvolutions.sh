@@ -2,8 +2,8 @@
 
 ## declare an array of evolutions
 declare -a evolutions=(
-    "11_hat" "31_properties" "32_relationships"
-    "33_staticData" "35_sampleCollections", "41_authentication")
+    "11_hat" "12_hatEvolutions" "31_properties" "32_relationships"
+    "33_staticData" "35_sampleCollections" "41_authentication")
 
 jdbcurl=$JDBCURL
 dbuser=$DBUSER
@@ -45,6 +45,7 @@ if [[ $TASK == 'dropAll' ]]; then
           --password=$dbpass \
           --url=$jdbcurl \
           --classpath=$CLASSPATH \
+          --liquibaseSchemaName=public \
           --defaultSchemaName=hat \
           dropAll
 else
@@ -61,6 +62,7 @@ else
           --password=$dbpass \
           --url=$jdbcurl \
           --classpath=$CLASSPATH \
+          --liquibaseSchemaName=public \
           --defaultSchemaName=hat \
           update
     done
