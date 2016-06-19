@@ -34,7 +34,7 @@ case $key in
 esac
 shift # past argument or value
 done
-echo "Running Evolutions on $CONTEXTS contexts"
+echo "Running Evolutions on $CONTEXTS contexts, task $TASK"
 
 CLASSPATH=postgresql-9.4.1208.jre6.jar
 
@@ -49,22 +49,34 @@ if [[ $TASK == 'dropAll' ]]; then
           --defaultSchemaName=hat \
           dropAll
 else
-  if [[ $CONTEXTS == '' ]]; then
-    echo "Must specify evolution contexts via -c or --contexts: 'structuresonly', 'data', 'testdata' or a combination of those"
+  if [[ $TASK == 'rollbackOne' ]]; then
+      echo "Rollback One"
+           ./liquibase --changeLogFile=12_hatEvolutions.sql \
+              --username=$dbuser \
+              --password=$dbpass \
+              --url=$jdbcurl \
+              --classpath=$CLASSPATH \
+              --liquibaseSchemaName=public \
+              --defaultSchemaName=hat \
+              rollbackCount 1
   else
-    ## now loop through the above array
-    for i in "${evolutions[@]}"
-    do
-       echo "Evolution $i.sql"
-       ./liquibase --changeLogFile=$i.sql \
-          --contexts=$CONTEXTS \
-          --username=$dbuser \
-          --password=$dbpass \
-          --url=$jdbcurl \
-          --classpath=$CLASSPATH \
-          --liquibaseSchemaName=public \
-          --defaultSchemaName=hat \
-          update
-    done
+      if [[ $CONTEXTS == '' ]]; then
+        echo "Must specify evolution contexts via -c or --contexts: 'structuresonly', 'data', 'testdata' or a combination of those"
+      else
+        ## now loop through the above array
+        for i in "${evolutions[@]}"
+        do
+           echo "Evolution $i.sql"
+           ./liquibase --changeLogFile=$i.sql \
+              --contexts=$CONTEXTS \
+              --username=$dbuser \
+              --password=$dbpass \
+              --url=$jdbcurl \
+              --classpath=$CLASSPATH \
+              --liquibaseSchemaName=public \
+              --defaultSchemaName=hat \
+              update
+        done
+      fi
   fi
 fi

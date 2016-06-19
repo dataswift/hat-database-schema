@@ -72,3 +72,68 @@ CREATE TABLE hat.stats_data_debit_cless_bundle_records (
 --rollback DROP SEQUENCE hat.stats_data_debit_data_table_access_seq;
 --rollback DROP TABLE hat.stats_data_debit_operation;
 --rollback DROP SEQUENCE hat.stats_data_debit_operation_seq;
+
+--changeset hubofallthings:recursiveStructureViews context:structuresonly
+
+CREATE VIEW hat.data_table_tree AS WITH RECURSIVE recursive_table(id, date_created, last_updated, name, source_name, table1) AS (
+  SELECT
+    b.id,
+    b.date_created,
+    b.last_updated,
+    b.name,
+    b.source_name,
+    b2b.table1,
+    array[b.id] AS path,
+    b.id as root_table
+  FROM hat.data_table b
+    LEFT JOIN hat.data_tabletotablecrossref b2b
+      ON b.id = b2b.table2
+  UNION ALL
+  SELECT
+    b.id,
+    b.date_created,
+    b.last_updated,
+    b.name,
+    b.source_name,
+    b2b.table1,
+    (r_b.path || b.id),
+    path[1] as root_table
+  FROM recursive_table r_b, hat.data_table b
+    LEFT JOIN hat.data_tabletotablecrossref b2b
+      ON b.id = b2b.table2
+  WHERE b2b.table1 = r_b.id
+)
+SELECT *
+FROM recursive_table;
+
+CREATE VIEW hat.bundle_context_tree AS WITH RECURSIVE recursive_bundle_context(id, date_created, last_updated, name, bundle_parent) AS (
+  SELECT
+    b.id,
+    b.date_created,
+    b.last_updated,
+    b.name,
+    b2b.bundle_parent,
+    ARRAY [b.id] AS path,
+    b.id as root_bundle
+  FROM hat.bundle_context b
+    LEFT JOIN hat.bundle_context_to_bundle_crossref b2b
+      ON b.id = b2b.bundle_child
+  UNION ALL
+  SELECT
+    b.id,
+    b.date_created,
+    b.last_updated,
+    b.name,
+    b2b.bundle_parent,
+    (r_b.path || b.id),
+    path[1] as root_table
+  FROM recursive_bundle_context r_b, hat.bundle_context b
+    LEFT JOIN hat.bundle_context_to_bundle_crossref b2b
+      ON b.id = b2b.bundle_child
+  WHERE b2b.bundle_parent = r_b.id
+)
+SELECT *
+FROM recursive_bundle_context;
+
+--rollback DROP VIEW data_table_tree;
+--rollback DROP VIEW bundle_context_tree;
