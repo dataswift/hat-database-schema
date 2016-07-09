@@ -83,8 +83,8 @@ CREATE VIEW hat.data_table_tree AS WITH RECURSIVE recursive_table(id, date_creat
     b.name,
     b.source_name,
     b2b.table1,
-    array[b.id] AS path,
-    b.id as root_table
+    ARRAY [b.id] AS path,
+    b.id         AS root_table
   FROM hat.data_table b
     LEFT JOIN hat.data_tabletotablecrossref b2b
       ON b.id = b2b.table2
@@ -97,7 +97,7 @@ CREATE VIEW hat.data_table_tree AS WITH RECURSIVE recursive_table(id, date_creat
     b.source_name,
     b2b.table1,
     (r_b.path || b.id),
-    path[1] as root_table
+    path [1] AS root_table
   FROM recursive_table r_b, hat.data_table b
     LEFT JOIN hat.data_tabletotablecrossref b2b
       ON b.id = b2b.table2
@@ -114,7 +114,7 @@ CREATE VIEW hat.bundle_context_tree AS WITH RECURSIVE recursive_bundle_context(i
     b.name,
     b2b.bundle_parent,
     ARRAY [b.id] AS path,
-    b.id as root_bundle
+    b.id         AS root_bundle
   FROM hat.bundle_context b
     LEFT JOIN hat.bundle_context_to_bundle_crossref b2b
       ON b.id = b2b.bundle_child
@@ -126,7 +126,7 @@ CREATE VIEW hat.bundle_context_tree AS WITH RECURSIVE recursive_bundle_context(i
     b.name,
     b2b.bundle_parent,
     (r_b.path || b.id),
-    path[1] as root_table
+    path [1] AS root_table
   FROM recursive_bundle_context r_b, hat.bundle_context b
     LEFT JOIN hat.bundle_context_to_bundle_crossref b2b
       ON b.id = b2b.bundle_child
@@ -137,3 +137,28 @@ FROM recursive_bundle_context;
 
 --rollback DROP VIEW data_table_tree;
 --rollback DROP VIEW bundle_context_tree;
+
+--changeset hubofallthings:contextlessBundlesRevamp context:structuresonly
+
+DROP TABLE hat.bundle_contextless_join CASCADE;
+DROP TABLE hat.bundle_contextless_table CASCADE;
+DROP TABLE hat.bundle_contextless_table_slice CASCADE;
+DROP TABLE hat.bundle_contextless_table_slice_condition CASCADE;
+
+-- DROP SEQUENCE hat.bundle_contextless_join_id_seq CASCADE;
+-- DROP SEQUENCE hat.bundle_contextless_table_id_seq CASCADE;
+-- DROP SEQUENCE hat.bundle_contextless_table_slice_id_seq CASCADE;
+-- DROP SEQUENCE hat.bundle_contextless_table_slice_condition_id_seq CASCADE;
+
+CREATE SEQUENCE hat.bundle_contextless_data_source_dataset_seq;
+
+CREATE TABLE hat.bundle_contextless_data_source_dataset (
+  id               INTEGER NOT NULL DEFAULT nextval('hat.bundle_contextless_data_source_dataset_seq') PRIMARY KEY,
+  bundle_id        INTEGER NOT NULL REFERENCES hat.bundle_contextless (id),
+  source_name      VARCHAR NOT NULL,
+  dataset_name     VARCHAR NOT NULL,
+  dataset_table_id INTEGER NOT NULL REFERENCES hat.data_table (id),
+  description      VARCHAR NOT NULL,
+  field_structure  VARCHAR NOT NULL,
+  field_ids        INTEGER []                 -- flat list of field ids for simple value filtering
+);
