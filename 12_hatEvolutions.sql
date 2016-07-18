@@ -162,3 +162,8 @@ CREATE TABLE hat.bundle_contextless_data_source_dataset (
   field_structure  VARCHAR NOT NULL,
   field_ids        INTEGER []                 -- flat list of field ids for simple value filtering
 );
+
+-- changeset hubofallthings:bundleFieldsNotNull context:structuresonly
+
+UPDATE hat.bundle_contextless_data_source_dataset SET field_ids='{}' WHERE field_ids IS NULL;
+ALTER TABLE hat.bundle_contextless_data_source_dataset ALTER COLUMN field_ids SET NOT NULL;
