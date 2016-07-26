@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-export DATABASE=${DATABASE:-"hat20"}
-export DBUSER=${DBUSER:-$DATABASE}
-export DBPASS=${DBPASS:-"pa55w0rd"}
+export DATABASE=${DATABASE_NAME:-"hat210"}
+export DBUSER=${DATABASE_USER:-$DATABASE}
+export DBPASS=${DATABASE_PASSWORD:-"pa55w0rd"}
 export JDBCURL="jdbc:postgresql://localhost/$DATABASE"
 
 export POSTGRES_DB=$DATABASE
