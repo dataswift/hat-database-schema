@@ -64,19 +64,21 @@ else
         echo "Must specify evolution contexts via -c or --contexts: 'structuresonly', 'data', 'testdata' or a combination of those"
       else
         ## now loop through the above array
+        echo "" > evolution.sql
         for i in "${evolutions[@]}"
         do
            echo "Evolution $i.sql"
-           ./liquibase --changeLogFile=$i.sql \
-              --contexts=$CONTEXTS \
-              --username=$dbuser \
-              --password=$dbpass \
-              --url=$jdbcurl \
-              --classpath=$CLASSPATH \
-              --liquibaseSchemaName=public \
-              --defaultSchemaName=hat \
-              update
+           cat $i.sql >> evolution.sql
         done
+        ./liquibase --changeLogFile=evolution.sql \
+          --contexts=$CONTEXTS \
+          --username=$dbuser \
+          --password=$dbpass \
+          --url=$jdbcurl \
+          --classpath=$CLASSPATH \
+          --liquibaseSchemaName=public \
+          --defaultSchemaName=hat \
+          update
       fi
   fi
 fi

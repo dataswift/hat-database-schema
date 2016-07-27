@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export DATABASE=${DATABASE_NAME:-"hat210"}
+export DATABASE=${DATABASE_NAME:-"hat211"}
 export DBUSER=${DATABASE_USER:-$DATABASE}
 export DBPASS=${DATABASE_PASSWORD:-"pa55w0rd"}
 export JDBCURL="jdbc:postgresql://localhost/$DATABASE"
