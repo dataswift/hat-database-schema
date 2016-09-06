@@ -2,12 +2,12 @@
 
 # Setup HAT access
 echo "Setting up HAT access"
-HAT_OWNER=${HAT_OWNER:-'bobplumber'}
+HAT_OWNER=${HAT_OWNER:-'bobtheplumber'}
 HAT_OWNER_ID=${HAT_OWNER_ID:-`uuidgen`}
 HAT_OWNER_NAME=${HAT_OWNER_NAME:-'Bob'}
 HAT_OWNER_PASSWORD=${HAT_OWNER_PASSWORD:-'pa55w0rd'}
 
-HAT_PLATFORM=${HAT_PLATFORM:-'support@hatdex.org'}
+HAT_PLATFORM=${HAT_PLATFORM:-'hatdex.org'}
 HAT_PLATFORM_ID=${HAT_PLATFORM_ID:-`uuidgen`}
 HAT_PLATFORM_NAME=${HAT_PLATFORM_NAME:-'hatdex'}
 HAT_PLATFORM_PASSWORD=${HAT_PLATFORM_PASSWORD:-'pa55w0rd'}
