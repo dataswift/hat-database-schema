@@ -79,6 +79,10 @@ else
           --liquibaseSchemaName=public \
           --defaultSchemaName=hat \
           update
+
+        if [ -f 41_authentication.sql ]; then
+          rm 41_authentication.sql
+        fi
       fi
   fi
 fi

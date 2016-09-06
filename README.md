@@ -5,7 +5,7 @@ Setting up the environment:
 
     source env.sh
 
-You can modify the database creentials by changing environment variables:
+You can modify the database credentials by changing environment variables:
 
 - DATABASE
 - DBUSER
@@ -14,8 +14,14 @@ You can modify the database creentials by changing environment variables:
 Then run:
 
 	./setupDatabase.sh
+Which will setup the credentials and the required database extensions. 
 
-Which will setup the credentials and the required database extensions. Finally, execute (liquibase-based) database evolutions on the DB:
+Then run:
+
+    ./setupAccess.sh
+Which will setup the initial HAT Owner and HAT Access. This will generate a file `41_authentication.sql`, which is deleted for security reasons after the `applyEvolutions.sh` is run. Re-run this as needed. 
+
+Finally, execute (liquibase-based) database evolutions on the DB:
 
     ./applyEvolutions.sh -c structuresonly,data
 
