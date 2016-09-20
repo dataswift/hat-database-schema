@@ -2,7 +2,7 @@
 
 ## declare an array of evolutions
 declare -a evolutions=(
-    "11_hat" "12_hatEvolutions" "31_properties" "32_relationships"
+    "11_hat" "12_hatEvolutions" "13_liveEvolutions" "31_properties" "32_relationships"
     "33_staticData" "35_sampleCollections" "41_authentication")
 
 jdbcurl=$JDBCURL
@@ -68,9 +68,7 @@ else
         for i in "${evolutions[@]}"
         do
            echo "Evolution $i.sql"
-           cat $i.sql >> evolution.sql
-        done
-        ./liquibase --changeLogFile=evolution.sql \
+           ./liquibase --changeLogFile=$i.sql \
           --contexts=$CONTEXTS \
           --username=$dbuser \
           --password=$dbpass \
@@ -79,6 +77,8 @@ else
           --liquibaseSchemaName=public \
           --defaultSchemaName=hat \
           update
+        done
+
       fi
   fi
 fi
