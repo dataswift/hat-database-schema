@@ -7,7 +7,7 @@ INSERT INTO "hat"."user_user" VALUES
     '%HAT_OWNER_ID%',
     now(), now(),
     '%HAT_OWNER%',
-    '%HAT_OWNER_PASSWORD%',
+    %HAT_OWNER_PASSWORD_HASH%,
     '%HAT_OWNER_NAME%',
     'owner',
     't'
@@ -18,7 +18,7 @@ INSERT INTO "hat"."user_user" VALUES
     '%HAT_PLATFORM_ID%',
     now(), now(),
     '%HAT_PLATFORM%',
-    '%HAT_PLATFORM_PASSWORD_HASH%',
+    %HAT_PLATFORM_PASSWORD_HASH%,
     '%HAT_PLATFORM_NAME%',
     'platform',
     't'

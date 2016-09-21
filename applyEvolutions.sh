@@ -64,7 +64,6 @@ else
         echo "Must specify evolution contexts via -c or --contexts: 'structuresonly', 'data', 'testdata' or a combination of those"
       else
         ## now loop through the above array
-        echo "" > evolution.sql
         for i in "${evolutions[@]}"
         do
            echo "Evolution $i.sql"
@@ -79,6 +78,9 @@ else
           update
         done
 
+        if [ -f 41_authentication.sql ]; then
+          rm 41_authentication.sql
+        fi
       fi
   fi
 fi
