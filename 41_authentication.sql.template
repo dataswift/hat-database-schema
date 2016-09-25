@@ -23,15 +23,3 @@ INSERT INTO "hat"."user_user" VALUES
     'platform',
     't'
   );
-
-INSERT INTO "hat"."user_access_token" VALUES
-  (
-    uuid_generate_v4(),
-    '%HAT_OWNER_ID%'
-  );
-
-INSERT INTO "hat"."user_access_token" VALUES
-  (
-    uuid_generate_v4(),
-    '%HAT_PLATFORM_ID%'
-  );
