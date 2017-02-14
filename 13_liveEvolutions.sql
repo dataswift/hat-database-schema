@@ -217,3 +217,20 @@ CREATE TABLE IF NOT EXISTS hat.user_mail_tokens (
 );
 
 --rollback DROP TABLE user_mail_tokens;
+
+--changeset hubofallthings:fileMetadata context:structuresonly
+
+CREATE TABLE hat.hat_file (
+  id           VARCHAR   NOT NULL PRIMARY KEY,
+  name         VARCHAR   NOT NULL,
+  source       VARCHAR   NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT (now()),
+  last_updated TIMESTAMP NOT NULL DEFAULT (now()),
+  tags         TEXT [],
+  title        VARCHAR,
+  description  VARCHAR,
+  source_url   VARCHAR,
+  status       VARCHAR   NOT NULL
+);
+
+--rollback DROP TABLE hat.hat_file;
