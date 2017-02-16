@@ -230,7 +230,7 @@ CREATE TABLE hat.hat_file (
   title        VARCHAR,
   description  VARCHAR,
   source_url   VARCHAR,
-  status       VARCHAR   NOT NULL
+  status       JSONB   NOT NULL
 );
 
 --rollback DROP TABLE hat.hat_file;
