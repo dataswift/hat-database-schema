@@ -234,3 +234,14 @@ CREATE TABLE hat.hat_file (
 );
 
 --rollback DROP TABLE hat.hat_file;
+
+--changeset hubofallthings:fileAccessPermissions context:structuresonly
+
+CREATE TABLE hat.hat_file_access (
+  file_id VARCHAR NOT NULL REFERENCES hat.hat_file(id),
+  user_id UUID NOT NULL REFERENCES hat.user_user(user_id),
+  content BOOL NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (file_id, user_id)
+);
+
+--rollback DROP TABLE hat.hat_file_access;
