@@ -245,3 +245,9 @@ CREATE TABLE hat.hat_file_access (
 );
 
 --rollback DROP TABLE hat.hat_file_access;
+
+--changeset hubofallthings:fileAccessAllowPublic context:structuresonly
+
+ALTER TABLE hat.hat_file ADD COLUMN content_public BOOLEAN NOT NULL DEFAULT(FALSE);
+--rollback ALTER TABLE hat.hat_file DROP COLUMN content_public;
+
