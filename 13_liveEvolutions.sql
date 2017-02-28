@@ -251,3 +251,37 @@ CREATE TABLE hat.hat_file_access (
 ALTER TABLE hat.hat_file ADD COLUMN content_public BOOLEAN NOT NULL DEFAULT(FALSE);
 --rollback ALTER TABLE hat.hat_file DROP COLUMN content_public;
 
+--changeset hubofallthings:databaseStats context:structuresonly
+
+CREATE VIEW hat.data_table_size AS
+  SELECT nspname || '.' || relname AS "relation",
+         pg_total_relation_size(C.oid) AS "total_size"
+  FROM pg_class C
+    LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+        AND C.relkind <> 'i'
+        AND nspname !~ '^pg_toast'
+  ORDER BY pg_total_relation_size(C.oid) DESC;
+
+--changeset hubofallthings:userAccessLog context:structuresonly
+
+DROP TABLE hat.user_access_token;
+
+--rollback CREATE TABLE hat.user_access_token (
+--rollback   access_token VARCHAR NOT NULL PRIMARY KEY,
+--rollback   user_id UUID NOT NULL REFERENCES hat.user_user (user_id),
+--rollback   scope VARCHAR NOT NULL DEFAULT (''),
+--rollback   resource VARCHAR NOT NULL DEFAULT ('')
+--rollback );
+
+CREATE TABLE hat.user_access_log (
+  date     TIMESTAMP NOT NULL DEFAULT (NOW()),
+  user_id  UUID      NOT NULL REFERENCES hat.user_user (user_id),
+  type     VARCHAR   NOT NULL,
+  scope    VARCHAR   NOT NULL,
+  application_name VARCHAR,
+  application_resource VARCHAR
+);
+
+--rollback DROP TABLE hat.user_access_log;
+
