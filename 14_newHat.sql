@@ -30,3 +30,17 @@ CREATE TABLE hat.data_json_group_records (
 --rollback DROP TABLE hat.data_json_group_records;
 --rollback DROP TABLE hat.data_json_groups;
 
+--changeset hubofallthings:combinators-bundles context:structuresonly
+
+CREATE TABLE hat.data_combinators (
+  combinator_id VARCHAR NOT NULL PRIMARY KEY,
+  combinator    JSONB   NOT NULL
+);
+
+CREATE TABLE hat.data_bundles (
+  bundle_id VARCHAR NOT NULL PRIMARY KEY,
+  bundle    JSONB   NOT NULL
+);
+
+--rollback DROP TABLE hat.data_combinators;
+--rollback DROP TABLE hat.data_bundles;
