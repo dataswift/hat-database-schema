@@ -44,3 +44,8 @@ CREATE TABLE hat.data_bundles (
 
 --rollback DROP TABLE hat.data_combinators;
 --rollback DROP TABLE hat.data_bundles;
+
+--changeset hubofallthings:hatServiceNamespaces
+ALTER TABLE hat.applications ADD COLUMN namespace VARCHAR NOT NULL DEFAULT('');
+UPDATE hat.applications SET namespace = lower(title);
+UPDATE hat.applications SET namespace = 'rumpel' WHERE title = 'RumpelLite';
