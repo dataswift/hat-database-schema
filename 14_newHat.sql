@@ -49,3 +49,23 @@ CREATE TABLE hat.data_bundles (
 ALTER TABLE hat.applications ADD COLUMN namespace VARCHAR NOT NULL DEFAULT('');
 UPDATE hat.applications SET namespace = lower(title);
 UPDATE hat.applications SET namespace = 'rumpel' WHERE title = 'RumpelLite';
+
+--changeset hubofallthings:newDataDebits
+
+CREATE TABLE hat.data_debit_contract (
+  data_debit_key VARCHAR   NOT NULL PRIMARY KEY,
+  date_created   TIMESTAMP NOT NULL,
+  client_id      UUID      NOT NULL REFERENCES hat.user_user (user_id)
+);
+
+CREATE TABLE hat.data_debit_bundle (
+  data_debit_key VARCHAR   NOT NULL REFERENCES hat.data_debit_contract (data_debit_key),
+  bundle_id      VARCHAR   NOT NULL REFERENCES hat.data_bundles (bundle_id),
+  date_created   TIMESTAMP NOT NULL,
+  start_date     TIMESTAMP NOT NULL,
+  end_date       TIMESTAMP NOT NULL,
+  rolling        BOOLEAN   NOT NULL,
+  enabled        BOOLEAN   NOT NULL,
+  PRIMARY KEY (data_debit_key, bundle_id)
+);
+
