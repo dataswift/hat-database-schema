@@ -69,3 +69,34 @@ CREATE TABLE hat.data_debit_bundle (
   PRIMARY KEY (data_debit_key, bundle_id)
 );
 
+--changeset hubofallthings:userRoles
+
+CREATE TABLE hat.user_role_available (
+  name VARCHAR PRIMARY KEY
+);
+
+CREATE TABLE hat.user_role (
+  user_id UUID REFERENCES hat.user_user (user_id)            NOT NULL,
+  role    VARCHAR REFERENCES hat.user_role_available (name)  NOT NULL,
+  extra   VARCHAR
+);
+
+INSERT INTO hat.user_role_available VALUES ('owner');
+INSERT INTO hat.user_role_available VALUES ('platform');
+INSERT INTO hat.user_role_available VALUES ('validate');
+
+INSERT INTO hat.user_role_available VALUES ('datadebit');
+INSERT INTO hat.user_role_available VALUES ('datacredit');
+INSERT INTO hat.user_role_available VALUES ('namespacewrite');
+INSERT INTO hat.user_role_available VALUES ('namespaceread');
+
+INSERT INTO hat.user_role SELECT user_id, role, NULL
+                          FROM hat.user_user;
+
+ALTER TABLE hat.user_user
+  DROP COLUMN role;
+
+--rollback ALTER TABLE hat.user_user ADD COLUMN role VARCHAR NOT NULL DEFAULT('');
+--rollback UPDATE hat.user_user SET hat.user_user.role = hat.user_role.role FROM hat.user_role WHERE hat.user_user.user_id = hat.user_role.user_id
+--rollback DROP TABLE hat.user_role;
+--rollback DROP TABLE hat.user_role_available;
