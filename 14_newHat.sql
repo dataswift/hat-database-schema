@@ -90,7 +90,7 @@ INSERT INTO hat.user_role_available VALUES ('datacredit');
 INSERT INTO hat.user_role_available VALUES ('namespacewrite');
 INSERT INTO hat.user_role_available VALUES ('namespaceread');
 
-INSERT INTO hat.user_role SELECT user_id, role, NULL
+INSERT INTO hat.user_role SELECT user_id, lower(role), NULL
                           FROM hat.user_user;
 
 ALTER TABLE hat.user_user
