@@ -100,3 +100,22 @@ ALTER TABLE hat.user_user
 --rollback UPDATE hat.user_user SET hat.user_user.role = hat.user_role.role FROM hat.user_role WHERE hat.user_user.user_id = hat.user_role.user_id
 --rollback DROP TABLE hat.user_role;
 --rollback DROP TABLE hat.user_role_available;
+
+--changeset hubofallthings:presetApplications context:data,testdata
+
+INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
+VALUES ('Xtiva', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
+        'https://xtiva-rumpel.hubat.net', '/users/authenticate', TRUE, 'app', TRUE, TRUE);
+
+INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
+VALUES ('SurreyCODE', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
+        'https://surreycode.hubat.net', '/users/authenticate', TRUE, 'app', TRUE, TRUE);
+
+INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
+VALUES ('RumpelStaging', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
+        'http://rumpel.hubat.net', '/users/authenticate', TRUE,
+        'testapp', TRUE, TRUE);
+
+--rollback DELETE FROM hat.applications WHERE title = 'Xtiva';
+--rollback DELETE FROM hat.applications WHERE title = 'SurreyCODE';
+--rollback DELETE FROM hat.applications WHERE title = 'RumpelStaging';
