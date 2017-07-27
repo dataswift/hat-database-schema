@@ -119,3 +119,28 @@ VALUES ('RumpelStaging', 'Private hyperdata browser for your HAT data', '/assets
 --rollback DELETE FROM hat.applications WHERE title = 'Xtiva';
 --rollback DELETE FROM hat.applications WHERE title = 'SurreyCODE';
 --rollback DELETE FROM hat.applications WHERE title = 'RumpelStaging';
+
+--changeset hubofallthings:presetApplicationUpdates context:data,testdata
+
+UPDATE hat.applications SET title = 'RumpelStage'
+WHERE title = 'Rumpel' AND url='http://rumpel-stage.hubofallthings.com.s3-website-eu-west-1.amazonaws.com';
+
+UPDATE hat.applications SET url = 'https://rumpel.hubat.net'
+WHERE title = 'RumpelStaging';
+
+--rollback UPDATE hat.applications SET title = 'Rumpel' WHERE title = 'RumpelStage';
+
+--changeset hubofallthings:applicationKeys context:structuresonly
+
+ALTER TABLE hat.applications DROP CONSTRAINT applications_pkey;
+
+ALTER TABLE hat.applications ADD PRIMARY KEY (title);
+
+ALTER TABLE hat.applications DROP COLUMN application_id;
+
+DROP SEQUENCE hat.application_seq;
+
+--rollback CREATE SEQUENCE hat.application_seq;
+--rollback ALTER TABLE hat.applications ADD COLUMN application_id INTEGER NOT NULL DEFAULT (nextval('hat.application_seq'));
+--rollback ALTER TABLE hat.applications DROP CONSTRAINT hat.applications_pkey;
+--rollback ALTER TABLE hat.applications ADD PRIMARY KEY (aplication_id);
