@@ -144,3 +144,9 @@ DROP SEQUENCE hat.application_seq;
 --rollback ALTER TABLE hat.applications ADD COLUMN application_id INTEGER NOT NULL DEFAULT (nextval('hat.application_seq'));
 --rollback ALTER TABLE hat.applications DROP CONSTRAINT hat.applications_pkey;
 --rollback ALTER TABLE hat.applications ADD PRIMARY KEY (aplication_id);
+
+--changeset hubofallthings:dataDebitConditions context:structuresonly
+
+ALTER TABLE hat.data_debit_bundle ADD COLUMN conditions VARCHAR REFERENCES hat.data_bundles(bundle_id);
+--rollback ALTER TABLE hat.data_debit_bundle DROP COLUMN conditions;
+
