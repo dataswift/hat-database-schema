@@ -101,20 +101,29 @@ ALTER TABLE hat.user_user
 --rollback DROP TABLE hat.user_role;
 --rollback DROP TABLE hat.user_role_available;
 
---changeset hubofallthings:presetApplications context:data,testdata
+--changeset hubofallthings:presetApplications context:data,testdata runOnChange:true
 
+DELETE FROM hat.applications WHERE title = 'Xtiva';
 INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
 VALUES ('Xtiva', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
         'https://xtiva-rumpel.hubat.net', '/users/authenticate', TRUE, 'app', TRUE, TRUE);
 
+DELETE FROM hat.applications WHERE title = 'SurreyCODE';
 INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
 VALUES ('SurreyCODE', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
-        'https://surreycode.hubat.net', '/users/authenticate', TRUE, 'app', TRUE, TRUE);
+        'https://rumpel.surreycode.net', '/users/authenticate', TRUE, 'app', TRUE, TRUE);
 
+DELETE FROM hat.applications WHERE title = 'RumpelStaging';
 INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
 VALUES ('RumpelStaging', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
         'http://rumpel.hubat.net', '/users/authenticate', TRUE,
         'testapp', TRUE, TRUE);
+
+DELETE FROM hat.applications WHERE title = 'Tamo';
+INSERT INTO hat.applications (title, description, logo_url, url, auth_url, browser, category, setup, login_available)
+VALUES ('Tamo', 'Private hyperdata browser for your HAT data', '/assets/images/Rumpel-logo.svg',
+        'http://tamo-rumpel.hubat.net', '/users/authenticate', TRUE,
+        'app', TRUE, TRUE);
 
 --rollback DELETE FROM hat.applications WHERE title = 'Xtiva';
 --rollback DELETE FROM hat.applications WHERE title = 'SurreyCODE';
