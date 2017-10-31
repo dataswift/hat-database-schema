@@ -326,3 +326,16 @@ DROP TABLE IF EXISTS hat.system_propertyrecord;
 DROP TABLE IF EXISTS hat.system_unitofmeasurement;
 DROP TABLE IF EXISTS hat.system_type;
 DROP TABLE IF EXISTS hat.things_thing;
+--changeset hubofallthings:sheFunctionDefinitions context:structuresonly
+
+CREATE TABLE hat.she_function (
+  name VARCHAR      NOT NULL PRIMARY KEY,
+  description    VARCHAR   NOT NULL,
+  trigger     JSONB      NOT NULL,
+  enabled   BOOLEAN NOT NULL,
+  bundle_id      VARCHAR   NOT NULL REFERENCES hat.data_bundles (bundle_id),
+  last_execution TIMESTAMPTZ
+);
+
+--rollback DROP TABLE hat.she_function;
+
