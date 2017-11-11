@@ -339,13 +339,12 @@ CREATE TABLE hat.she_function (
 
 --rollback DROP TABLE hat.she_function;
 
---changeset hubofallthings:hatapp context:data,testdata
+--changeset hubofallthings:hatapp context:data,testdata runOnChange:true
 
-DELETE FROM hat.applications WHERE title = 'RumpelStaging';
+DELETE FROM hat.applications WHERE title = 'HAT';
 INSERT INTO hat.applications (title, description, namespace, logo_url, url, auth_url, browser, category, setup, login_available)
 VALUES ('HAT', 'The HAT App ', 'hat', '/assets/images/Rumpel-logo.svg',
         'hatapp://hatapphost', '', TRUE,
         'app', TRUE, TRUE);
-
 
 
