@@ -347,4 +347,44 @@ VALUES ('HAT', 'The HAT App ', 'hat', '/assets/images/Rumpel-logo.svg',
         'hatapp://hatapphost', '', TRUE,
         'app', TRUE, TRUE);
 
+--changeset hubofallthings:shefeed context:data,testdata
+
+INSERT INTO hat.she_function (name, description, trigger, enabled, bundle_id, last_execution) VALUES
+  ('data-feed-direct-mapper', '', '{"triggerType": "individual"}', TRUE, 'data-feed-direct-mapper', NULL)
+ON CONFLICT (name) DO UPDATE
+  SET description = '',
+  trigger = '{"triggerType": "individual"}',
+  enabled = TRUE,
+  bundle_id = 'data-feed-direct-mapper';
+
+INSERT INTO hat.data_json (record_id, source, owner, date, data, hash) VALUES
+  ('6bf8a89a-2692-4f00-9f2c-0b251ed1820b', 'she/feed', (SELECT user_id FROM hat.user_user LIMIT 1), now(),
+   jsonb_set(
+       jsonb_set('{
+      "date": {
+        "iso": "2017-11-12T14:48:13.000+00:00",
+        "unix": 1510498093
+      },
+      "title": {
+        "text": "HAT Private Micro-server created",
+        "action": "she"
+      },
+      "types": [
+        "she"
+      ],
+      "source": "she",
+      "content": {
+        "text": "Digital Citizenship on the Internet is about the freedom of persona(s) we wish to have with the data we are able to claim, control and share. You now have a HAT micro-server to do that. Congratulations!",
+        "media": [
+                    {
+                        "url": "https://developers.hubofallthings.com/images/firstimage.13d7.jpg"
+                    }
+                ]
+      }
+    }',
+                 '{date,iso}', to_jsonb(to_char(now() :: TIMESTAMP AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')),
+                 TRUE),
+       '{date,unix}', to_jsonb(extract(EPOCH FROM now())), TRUE)
+    , E'\\x8513402516BB6F644A9D7C319765FB326AEBF2EAECA05F1B5C0AD77920A87A9C');
+
 
