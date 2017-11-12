@@ -347,7 +347,79 @@ VALUES ('HAT', 'The HAT App ', 'hat', '/assets/images/Rumpel-logo.svg',
         'hatapp://hatapphost', '', TRUE,
         'app', TRUE, TRUE);
 
---changeset hubofallthings:shefeed context:data,testdata
+--changeset hubofallthings:shefeed context:data,testdata runOnChange:true
+
+INSERT INTO hat.data_bundles (bundle_id, bundle) VALUES ('data-feed-direct-mapper', '{
+  "twitter": {
+    "orderBy": "lastUpdated",
+    "endpoints": [
+      {
+        "endpoint": "twitter/tweets"
+      }
+    ]
+  },
+  "calendar": {
+    "orderBy": "created",
+    "endpoints": [
+      {
+        "filters": [],
+        "endpoint": "calendar/google/events"
+      },
+      {
+        "filters": [],
+        "endpoint": "calendar/google/events"
+      }
+    ]
+  },
+  "fitbit/sleep": {
+    "orderBy": "endTime",
+    "endpoints": [
+      {
+        "endpoint": "fitbit/sleep"
+      }
+    ]
+  },
+  "facebook/feed": {
+    "orderBy": "created_time",
+    "endpoints": [
+      {
+        "endpoint": "facebook/feed"
+      }
+    ]
+  },
+  "fitbit/weight": {
+    "orderBy": "date",
+    "endpoints": [
+      {
+        "endpoint": "fitbit/weight"
+      }
+    ]
+  },
+  "facebook/events": {
+    "orderBy": "start_time",
+    "endpoints": [
+      {
+        "endpoint": "facebook/events"
+      }
+    ]
+  },
+  "fitbit/activity": {
+    "orderBy": "originalStartTime",
+    "endpoints": [
+      {
+        "endpoint": "fitbit/activity"
+      }
+    ]
+  },
+  "fitbit/activity/day/summary": {
+    "orderBy": "dateCreated",
+    "endpoints": [
+      {
+        "endpoint": "fitbit/activity/day/summary"
+      }
+    ]
+  }
+}') ON CONFLICT DO NOTHING;
 
 INSERT INTO hat.she_function (name, description, trigger, enabled, bundle_id, last_execution) VALUES
   ('data-feed-direct-mapper', '', '{"triggerType": "individual"}', TRUE, 'data-feed-direct-mapper', NULL)
@@ -357,8 +429,13 @@ ON CONFLICT (name) DO UPDATE
   enabled = TRUE,
   bundle_id = 'data-feed-direct-mapper';
 
+INSERT INTO hat.user_user VALUES
+  ('13609abc-dcae-432d-9ff8-a0aa2e2d899e', now(), now(), 'she', '$2a$12$llhjdJl8O9agrIsWX1T4/OuDoBdhQG1WeI65d6BUJQf5kfJrjRsJy', 'Smart HAT Engine', 't');
+INSERT INTO hat.user_role (user_id, role, extra)
+VALUES ('13609abc-dcae-432d-9ff8-a0aa2e2d899e', 'platform', NULL) ON CONFLICT DO NOTHING;
+
 INSERT INTO hat.data_json (record_id, source, owner, date, data, hash) VALUES
-  ('6bf8a89a-2692-4f00-9f2c-0b251ed1820b', 'she/feed', (SELECT user_id FROM hat.user_user LIMIT 1), now(),
+  ('6bf8a89a-2692-4f00-9f2c-0b251ed1820b', 'she/feed', (SELECT user_id FROM hat.user_user WHERE email='she' LIMIT 1), now(),
    jsonb_set(
        jsonb_set('{
       "date": {
@@ -385,6 +462,6 @@ INSERT INTO hat.data_json (record_id, source, owner, date, data, hash) VALUES
                  '{date,iso}', to_jsonb(to_char(now() :: TIMESTAMP AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')),
                  TRUE),
        '{date,unix}', to_jsonb(extract(EPOCH FROM now())), TRUE)
-    , E'\\x8513402516BB6F644A9D7C319765FB326AEBF2EAECA05F1B5C0AD77920A87A9C');
+    , E'\\x8513402516BB6F644A9D7C319765FB326AEBF2EAECA05F1B5C0AD77920A87A9C') ON CONFLICT DO NOTHING;
 
 
