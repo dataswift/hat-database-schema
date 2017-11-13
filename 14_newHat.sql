@@ -451,7 +451,7 @@ INSERT INTO hat.data_json (record_id, source, owner, date, data, hash) VALUES
       ],
       "source": "she",
       "content": {
-        "text": "Digital Citizenship on the Internet is about the freedom of persona(s) we wish to have with the data we are able to claim, control and share. You now have a HAT micro-server to do that. Congratulations!",
+        "text": "Digital Citizenship on the Internet is about the freedom of having our own persona(s) with the data we are able to claim, control and share. You now have a HAT micro-server to do that. Congratulations!",
         "media": [
                     {
                         "url": "https://developers.hubofallthings.com/images/firstimage.13d7.jpg"
