@@ -384,7 +384,7 @@ INSERT INTO hat.data_bundles (bundle_id, bundle) VALUES ('data-feed-direct-mappe
     "endpoints": [
       {
         "endpoint": "facebook/feed"
-      } 
+      }
     ]
   },
   "fitbit/weight": {
@@ -487,3 +487,13 @@ WHERE source = 'rumpel/profile'
       AND (data ->> 'dateCreated') NOT LIKE '%-%-%'
       AND (data ->> 'dateCreated')::INT8 > 1500000000000;
 SELECT * FROM hat.data_json;
+
+--changeset hubofallthings:notablesapp context:data
+
+DELETE FROM hat.applications WHERE title = 'Notables';
+INSERT INTO hat.applications (title, description, namespace, logo_url, url, auth_url, browser, category, setup, login_available)
+VALUES ('Notables', 'Notables App for your private and social thought sharing', 'rumpel', '/assets/images/Rumpel-logo.svg',
+        'notables://notablesapphost', '', TRUE,
+        'app', TRUE, TRUE);
+
+
