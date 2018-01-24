@@ -465,3 +465,11 @@ INSERT INTO hat.data_json (record_id, source, owner, date, data, hash) VALUES
     , E'\\x8513402516BB6F644A9D7C319765FB326AEBF2EAECA05F1B5C0AD77920A87A9C') ON CONFLICT DO NOTHING;
 
 
+--changeset hubofallthings:convertProfileDateMillisToSeconds context:data
+
+UPDATE hat.data_json
+SET data = data || CONCAT('{"dateCreated":', (data ->> 'dateCreated')::INT8 / 1000, '}')::jsonb
+WHERE source = 'rumpel/profile'
+      AND (data ->> 'dateCreated') NOT LIKE '%-%-%'
+      AND (data ->> 'dateCreated')::INT8 > 1500000000000;
+SELECT * FROM hat.data_json;
