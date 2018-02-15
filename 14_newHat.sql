@@ -496,4 +496,13 @@ VALUES ('Notables', 'Notables App for your private and social thought sharing', 
         'notables://notablesapphost', '', TRUE,
         'app', TRUE, TRUE);
 
+--changeset hubofallthings:applicationStatus context:structuresonly
+
+CREATE TABLE hat.application_status (
+  id      VARCHAR NOT NULL PRIMARY KEY,
+  version VARCHAR NOT NULL,
+  enabled BOOLEAN NOT NULL
+)
+
+--rollback DROP TABLE hat.application_status;
 
