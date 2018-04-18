@@ -506,3 +506,72 @@ CREATE TABLE hat.application_status (
 
 --rollback DROP TABLE hat.application_status;
 
+--changeset hubofallthings:dataDebitsExtras context:structuresonly
+
+INSERT INTO hat.user_role (user_id, role, extra)
+    SELECT client_id, 'datadebit', data_debit_key::VARCHAR FROM hat.data_debit_contract;
+
+DROP TABLE hat.stats_data_debit_cless_bundle_records;
+DROP TABLE hat.stats_data_debit_data_field_access;
+DROP TABLE hat.stats_data_debit_data_table_access;
+DROP TABLE hat.stats_data_debit_record_count;
+DROP TABLE hat.stats_data_debit_operation;
+DROP TABLE hat.data_debit;
+
+CREATE TABLE hat.data_debit (
+  data_debit_key          VARCHAR   NOT NULL PRIMARY KEY,
+  date_created            TIMESTAMP NOT NULL,
+  request_client_name     VARCHAR   NOT NULL,
+  request_client_url      VARCHAR   NOT NULL,
+  request_client_logo_url VARCHAR   NOT NULL,
+  request_application_id  VARCHAR,
+  request_description     VARCHAR
+);
+
+CREATE SEQUENCE hat.data_debit_permissions_sequence;
+
+CREATE TABLE hat.data_debit_permissions (
+  permissions_id       INTEGER   NOT NULL DEFAULT nextval('hat.data_debit_permissions_sequence') PRIMARY KEY,
+  data_debit_key       VARCHAR   NOT NULL REFERENCES hat.data_debit (data_debit_key),
+  date_created         TIMESTAMP NOT NULL,
+  purpose              VARCHAR   NOT NULL,
+  start                TIMESTAMP NOT NULL,
+  period               INT8 NOT NULL,
+  cancel_at_period_end BOOLEAN   NOT NULL,
+  canceled_at          TIMESTAMP,
+  terms_url            VARCHAR   NOT NULL,
+  bundle_id            VARCHAR   NOT NULL REFERENCES hat.data_bundles (bundle_id),
+  conditions           VARCHAR REFERENCES hat.data_bundles (bundle_id),
+  accepted             BOOLEAN   NOT NULL
+);
+
+INSERT INTO hat.data_debit
+(data_debit_key, date_created, request_client_name, request_client_url, request_client_logo_url, request_application_id, request_description)
+  SELECT
+    data_debit_key,
+    date_created,
+    '',
+    '',
+    '',
+    NULL,
+    NULL
+  FROM hat.data_debit_contract;
+
+INSERT INTO hat.data_debit_permissions
+(data_debit_key, date_created, purpose, start, period, cancel_at_period_end, canceled_at, terms_url, bundle_id, conditions, accepted)
+  SELECT
+    data_debit_key,
+    date_created,
+    '',
+    start_date,
+    extract(EPOCH FROM end_date - start_date) :: INT8,
+    NOT (rolling),
+    NULL,
+    '',
+    bundle_id,
+    conditions,
+    enabled
+  FROM hat.data_debit_bundle;
+
+
+
