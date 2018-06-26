@@ -574,4 +574,8 @@ INSERT INTO hat.data_debit_permissions
   FROM hat.data_debit_bundle;
 
 
+--changeset hubofallthings:sheFunctionHeadline context:structuresonly
+
+ALTER TABLE hat.she_function ADD COLUMN headline VARCHAR NOT NULL DEFAULT('');
+
 
