@@ -578,4 +578,110 @@ INSERT INTO hat.data_debit_permissions
 
 ALTER TABLE hat.she_function ADD COLUMN headline VARCHAR NOT NULL DEFAULT('');
 
+--changeset hubofallthings:sheFunctionEnableCounter context:data
 
+INSERT INTO hat.data_bundles (bundle_id, bundle) VALUES ('data-feed-counter', '{
+        "monzo/transactions": {
+            "endpoints": [
+                {
+                    "endpoint": "monzo/transactions"
+                }
+            ],
+            "orderBy": "created",
+            "ordering": "descending"
+        },
+        "calendar/google/events": {
+            "endpoints": [
+                {
+                    "endpoint": "calendar/google/events",
+                    "filters": []
+                },
+                {
+                    "endpoint": "calendar/google/events",
+                    "filters": []
+                }
+            ],
+            "orderBy": "start.dateTime",
+            "ordering": "descending"
+        },
+        "notables/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "rumpel/notablesv1"
+                }
+            ],
+            "orderBy": "created_time",
+            "ordering": "descending"
+        },
+        "fitbit/activity": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/activity"
+                }
+            ],
+            "orderBy": "originalStartTime",
+            "ordering": "descending"
+        },
+        "twitter/tweets": {
+            "endpoints": [
+                {
+                    "endpoint": "twitter/tweets"
+                }
+            ],
+            "orderBy": "lastUpdated",
+            "ordering": "descending"
+        },
+        "fitbit/sleep": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/sleep"
+                }
+            ],
+            "orderBy": "endTime",
+            "ordering": "descending"
+        },
+        "spotify/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "spotify/feed"
+                }
+            ],
+            "orderBy": "played_at",
+            "ordering": "descending"
+        },
+        "facebook/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "facebook/feed"
+                }
+            ],
+            "orderBy": "created_time",
+            "ordering": "descending"
+        },
+        "fitbit/weight": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/weight"
+                }
+            ],
+            "orderBy": "date",
+            "ordering": "descending"
+        }
+}')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO hat.she_function (name, description, headline, trigger, enabled, bundle_id, last_execution) VALUES
+  ('data-feed-counter',
+   'The Weekly Summary show your weekly activities. Weekly summary is private to you, but shareable as data.\n\nWeekly summary is powered by SHE, the Smart HAT Engine, the part of your HAT microserver that can install pre-trained analytics and algorithmic functions and outputs the results privately into your HAT.',
+   'A summary of your week''s digital activities', '{
+    "triggerType": "periodic", "period": "P1W"
+  }', TRUE, 'data-feed-counter', NULL)
+ON CONFLICT (name)
+  DO UPDATE
+    SET description = 'The Weekly Summary show your weekly activities. Weekly summary is private to you, but shareable as data.\n\nWeekly summary is powered by SHE, the Smart HAT Engine, the part of your HAT microserver that can install pre-trained analytics and algorithmic functions and outputs the results privately into your HAT.',
+      headline = 'A summary of your week''s digital activities',
+      trigger       = '{
+        "triggerType": "periodic", "period": "P1W"
+      }',
+      enabled       = TRUE,
+      bundle_id     = 'data-feed-counter';
