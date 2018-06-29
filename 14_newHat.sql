@@ -573,7 +573,6 @@ INSERT INTO hat.data_debit_permissions
     enabled
   FROM hat.data_debit_bundle;
 
-
 --changeset hubofallthings:sheFunctionHeadline context:structuresonly
 
 ALTER TABLE hat.she_function ADD COLUMN headline VARCHAR NOT NULL DEFAULT('');
@@ -685,3 +684,86 @@ ON CONFLICT (name)
       }',
       enabled       = TRUE,
       bundle_id     = 'data-feed-counter';
+
+--changeset hubofallthings:sheFunctionDataPreview context:structuresonly
+
+ALTER TABLE hat.she_function ADD COLUMN data_preview JSONB;
+ALTER TABLE hat.she_function ADD COLUMN logo VARCHAR;
+
+UPDATE hat.she_function SET
+logo = 'url',
+data_preview = '[
+	{
+        "source": "she",
+        "date": {
+            "iso": "2018-06-29T06:42:08.414Z",
+            "unix": 1530254528
+        },
+        "types": [
+            "insight",
+            "activity"
+        ],
+        "title": {
+            "text": "Your recent activity summary",
+            "subtitle": "21 June 23:00 - 29 June 06:42 GMT",
+            "action": "insight"
+        },
+        "content": {
+            "text": "Twitter:\n  Tweets sent: 1\n\nFacebook:\n  Posts composed: 13\n",
+            "nestedStructure": {
+                "twitter": [
+                    {
+                        "content": "Tweets sent",
+                        "badge": "1"
+                    }
+                ],
+                "facebook": [
+                    {
+                        "content": "Posts composed",
+                        "badge": "13"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "source": "she",
+        "date": {
+            "iso": "2018-06-21T23:00:47.319Z",
+            "unix": 1529622047
+        },
+        "types": [
+            "insight",
+            "activity"
+        ],
+        "title": {
+            "text": "Your recent activity summary",
+            "subtitle": "18 June 07:50 - 21 June 23:00 GMT",
+            "action": "insight"
+        },
+        "content": {
+            "text": "Twitter:\n  Tweets sent: 4\n\nFacebook:\n  Posts composed: 2\n\nNotables:\n  Notes taken: 4\n",
+            "nestedStructure": {
+                "twitter": [
+                    {
+                        "content": "Tweets sent",
+                        "badge": "4"
+                    }
+                ],
+                "facebook": [
+                    {
+                        "content": "Posts composed",
+                        "badge": "2"
+                    }
+                ],
+                "notables": [
+                    {
+                        "content": "Notes taken",
+                        "badge": "4"
+                    }
+                ]
+            }
+        }
+    }
+]'
+WHERE name = 'data-feed-counter';
