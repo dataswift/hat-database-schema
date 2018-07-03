@@ -767,3 +767,9 @@ data_preview = '[
     }
 ]'
 WHERE name = 'data-feed-counter';
+
+--changeset hubofallthings:sheFunctionDataPreviewEndpoint context:structuresonly
+
+ALTER TABLE hat.she_function ADD COLUMN data_preview_endpoint VARCHAR;
+
+UPDATE hat.she_function SET data_preview_endpoint = 'she/insights/activity-records' where name = 'data-feed-counter'
