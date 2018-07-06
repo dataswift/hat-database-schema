@@ -806,3 +806,8 @@ UPDATE hat.she_function SET graphics =
 	]
 }'
 WHERE name = 'data-feed-counter';
+
+--changeset hubofallthings:sheFunctionName context:structuresonly
+
+ALTER TABLE hat.she_function RENAME COLUMN name TO id;
+ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
