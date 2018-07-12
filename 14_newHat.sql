@@ -811,3 +811,11 @@ WHERE name = 'data-feed-counter';
 
 ALTER TABLE hat.she_function RENAME COLUMN name TO id;
 ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
+
+--changeset hubofallthings:uniquenessConstraints context:structuresonly
+
+ALTER TABLE hat.data_json ADD COLUMN source_timestamp TIMESTAMPTZ;
+ALTER TABLE hat.data_json ADD COLUMN source_unique_id VARCHAR;
+
+CREATE UNIQUE INDEX data_json_source_unique ON hat.data_json (source, source_unique_id);
+
