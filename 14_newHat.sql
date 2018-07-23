@@ -819,3 +819,40 @@ ALTER TABLE hat.data_json ADD COLUMN source_unique_id VARCHAR;
 
 CREATE UNIQUE INDEX data_json_source_unique ON hat.data_json (source, source_unique_id);
 
+--changeset hubofallthings:sheFunctionInfo context:structuresonly
+
+ALTER TABLE hat.she_function DROP COLUMN headline;
+ALTER TABLE hat.she_function DROP COLUMN description;
+ALTER TABLE hat.she_function ADD COLUMN info JSONB;
+
+UPDATE hat.she_function SET info =
+'{
+	"name": "Weekly summary",
+	"provider": "HATDeX",
+	"website": "www.hatdex.org",
+	"country": "United Kingdom",
+	"version": "1.0.0",
+	"lastUpdated": "2018-07-16T10:16:15+0000",
+	"privacyPolicyURL": "https://hatdex.org/privacy-notice-hat-owner-services-and-hat-accounts",
+	"supportEmail": "contact@hatdex.org",
+	"description": "Weekly Summary shows your weekly online activities. It allows you to to have an overview of your data accumulated in a week. The first weekly summary establish the start date of the tool and is a summary of your history of activities",
+	"headline": "A summary of your week’s digital activities"
+}'
+WHERE id = 'data-feed-counter';
+
+UPDATE hat.she_function SET info =
+'{
+	"name": "Feed mapper",
+	"provider": "HATDeX",
+	"website": "www.hatdex.org",
+	"country": "United Kingdom",
+	"version": "1.0.0",
+	"lastUpdated": "2018-07-16T10:16:15+0000",
+	"privacyPolicyURL": "https://hatdex.org/privacy-notice-hat-owner-services-and-hat-accounts",
+	"supportEmail": "contact@hatdex.org",
+	"description": "",
+	"headline": ""
+}'
+WHERE id = 'data-feed-direct-mapper';
+
+
