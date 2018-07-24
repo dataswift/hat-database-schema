@@ -819,3 +819,42 @@ ALTER TABLE hat.data_json ADD COLUMN source_unique_id VARCHAR;
 
 CREATE UNIQUE INDEX data_json_source_unique ON hat.data_json (source, source_unique_id);
 
+--changeset hubofallthings:sheFunctionRestructure context:structuresonly
+
+CREATE TABLE hat.she_function_status (
+  id                VARCHAR NOT NULL PRIMARY KEY,
+  enabled           BOOLEAN NOT NULL,
+  last_execution    TIMESTAMPTZ,
+  execution_started TIMESTAMPTZ
+);
+
+INSERT INTO hat.she_function_status
+(id, enabled, last_execution)
+  SELECT
+    id,
+    enabled,
+    last_execution
+  FROM hat.she_function;
+
+ALTER TABLE hat.she_function DROP COLUMN enabled;
+ALTER TABLE hat.she_function DROP COLUMN last_execution;
+
+ALTER TABLE hat.she_function ADD COLUMN version VARCHAR NOT NULL DEFAULT('1.0.0');
+ALTER TABLE hat.she_function ALTER COLUMN description TYPE JSONB USING json_build_object('text',description);
+ALTER TABLE hat.she_function ADD COLUMN terms_url VARCHAR NOT NULL DEFAULT('https://hatdex.org/terms-of-service-hat-owner-agreement');
+ALTER TABLE hat.she_function ADD COLUMN developer_id VARCHAR NOT NULL DEFAULT('hatdex');
+ALTER TABLE hat.she_function ADD COLUMN developer_name VARCHAR NOT NULL DEFAULT('HATDeX');
+ALTER TABLE hat.she_function ADD COLUMN developer_url VARCHAR NOT NULL DEFAULT('https://hatdex.org');
+ALTER TABLE hat.she_function ADD COLUMN developer_country VARCHAR;
+
+UPDATE hat.she_function SET name = 'Weekly Summary' WHERE id = 'data-feed-counter';
+UPDATE hat.she_function SET name = 'Feed mapper' WHERE id = 'data-feed-direct-mapper';
+
+UPDATE hat.she_function SET graphics = json_build_object(
+    'logo', graphics -> 'logo',
+    'screenshots', graphics -> 'screenshots',
+    'banner', json_build_object('normal', '')
+);
+
+ALTER TABLE hat.she_function ALTER COLUMN graphics SET NOT NULL;
+
