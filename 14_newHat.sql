@@ -856,5 +856,13 @@ UPDATE hat.she_function SET graphics = json_build_object(
     'banner', json_build_object('normal', '')
 );
 
+UPDATE hat.she_function SET graphics = json_build_object(
+    'logo', json_build_object('normal', ''),
+    'screenshots', json_build_array(),
+    'banner', json_build_object('normal', '')
+) WHERE id = 'data-feed-direct-mapper';
+
 ALTER TABLE hat.she_function ALTER COLUMN graphics SET NOT NULL;
+
+
 
