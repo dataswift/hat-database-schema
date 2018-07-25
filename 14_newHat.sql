@@ -864,7 +864,7 @@ UPDATE hat.she_function SET graphics = json_build_object(
 
 ALTER TABLE hat.she_function ALTER COLUMN graphics SET NOT NULL;
 
---changeset hubofallthings:sheFunctionGraphicsUpdate context:data
+--changeset hubofallthings:sheFunctionGraphicsUpdate context:data runOnChange:true
 
 UPDATE hat.she_function SET graphics =
 '{
@@ -894,5 +894,5 @@ UPDATE hat.she_function SET graphics =
 
 	]
 }'
-WHERE name = 'data-feed-counter';
+WHERE id = 'data-feed-counter';
 
