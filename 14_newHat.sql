@@ -864,5 +864,35 @@ UPDATE hat.she_function SET graphics = json_build_object(
 
 ALTER TABLE hat.she_function ALTER COLUMN graphics SET NOT NULL;
 
+--changeset hubofallthings:sheFunctionGraphicsUpdate context:data
 
+UPDATE hat.she_function SET graphics =
+'{
+	"logo": {
+		"normal": "https://static1.squarespace.com/static/5a71ebc8b1ffb68777ca627a/t/5acb4a166d2a73d3a00a10c6/1523272220659/HATAppsstore-rounded.png?format=300w"
+	},
+  "banner": {
+		"normal": ""
+	},
+	"screenshots": [
+		{
+			"normal": "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/cb/01/56/cb0156b7-0cb6-128c-b1ec-fc3c7b31eb87/mzl.xfaethox.png/300x0w.jpg",
+			"large": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/ac/a2/6b/aca26bb8-39dd-1cd9-159d-d37012ffbfeb/mzl.jiaxtegz.png/643x0w.jpg"
+		},
+		{
+			"normal": "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/26/b7/0f/26b70ffa-d9bc-2520-582b-b9a436eb00f5/pr_source.png/300x0w.jpg",
+			"large": "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/9b/2f/68/9b2f6853-ce11-a189-ae41-445e8e7b3248/mzl.fkcehkpp.png/643x0w.jpg"
+		},
+		{
+			"normal": "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/10/df/8f/10df8fae-b2b7-0c93-c530-d6338b1e6bc8/pr_source.png/300x0w.jpg",
+			"large": "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/28/de/7a/28de7aeb-54ed-6692-a63a-8102703361e2/pr_source.png/643x0w.png"
+		},
+		{
+			"normal": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/15/94/30/159430c6-99fc-ee9f-72aa-d46d8436d76c/mzl.dvmpzlje.png/300x0w.jpg",
+			"large": "https://is2-ssl.mzstatic.com/image/thumb/Purple118/v4/11/df/40/11df4050-582a-7598-fe02-b4421a4be818/pr_source.png/643x0w.png"
+		}
+
+	]
+}'
+WHERE name = 'data-feed-counter';
 
