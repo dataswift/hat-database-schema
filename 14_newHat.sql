@@ -896,3 +896,19 @@ UPDATE hat.she_function SET graphics =
 }'
 WHERE id = 'data-feed-counter';
 
+--changeset hubofallthings:sheFunctionMoreDetails context:structuresonly
+
+ALTER TABLE hat.she_function ADD COLUMN version_release_date TIMESTAMPTZ;
+UPDATE hat.she_function SET version_release_date = to_timestamp(1514808000);
+ALTER TABLE hat.she_function ALTER COLUMN version_release_date SET NOT NULL; -- acrobatics to go around Slick's broken support for default timestamp values
+
+ALTER TABLE hat.she_function ADD COLUMN developer_support_email VARCHAR NOT NULL DEFAULT('contact@hatdex.org');
+
+--changeset hubofallthings:sheFunctionDeveloper context:data
+
+ALTER TABLE hat.she_function ALTER COLUMN developer_name SET DEFAULT('HAT Data Exchange Ltd');
+
+UPDATE hat.she_function
+    SET developer_name = 'HAT Data Exchange Ltd'
+    WHERE developer_name = 'HATDeX';
+
