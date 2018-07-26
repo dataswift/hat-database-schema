@@ -912,3 +912,12 @@ UPDATE hat.she_function
     SET developer_name = 'HAT Data Exchange Ltd'
     WHERE developer_name = 'HATDeX';
 
+--changeset hubofallthings:hatAppEnabled context:data
+
+INSERT INTO hat.application_status (id, version, enabled)
+VALUES
+  ('hatapp', '1.2.4', true),
+  ('hatappstaging', '1.2.4', true)
+ON CONFLICT DO NOTHING;
+
+
