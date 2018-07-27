@@ -811,10 +811,15 @@ UPDATE hat.she_function SET graphics =
 }'
 WHERE name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionName context:structuresonly
+--changeset hubofallthings:sheFunctionName context:structuresonly runOnChange:true splitStatements:false
 
-ALTER TABLE hat.she_function RENAME COLUMN name TO id;
-ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
+DO $$
+BEGIN
+  IF NOT EXISTS(SELECT * FROM information_schema.columns WHERE table_name = 'she_function' and column_name = 'id') THEN
+    ALTER TABLE hat.she_function RENAME COLUMN "name" TO "id";
+    ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
+  END IF;
+END $$;
 
 --changeset hubofallthings:uniquenessConstraints context:structuresonly
 
