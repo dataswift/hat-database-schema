@@ -685,9 +685,11 @@ ON CONFLICT (name)
       enabled       = TRUE,
       bundle_id     = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionDataPreview context:structuresonly
+--changeset hubofallthings:sheFunctionDataPreview context:structuresonly runOnChange:true
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS data_preview;
 ALTER TABLE hat.she_function ADD COLUMN data_preview JSONB;
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS logo;
 ALTER TABLE hat.she_function ADD COLUMN logo VARCHAR;
 
 UPDATE hat.she_function SET
@@ -768,16 +770,18 @@ data_preview = '[
 ]'
 WHERE name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionDataPreviewEndpoint context:structuresonly
+--changeset hubofallthings:sheFunctionDataPreviewEndpoint context:structuresonly runOnChange:true
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS data_preview_endpoint;
 ALTER TABLE hat.she_function ADD COLUMN data_preview_endpoint VARCHAR;
 
-UPDATE hat.she_function SET data_preview_endpoint = 'she/insights/activity-records' where name = 'data-feed-counter'
+UPDATE hat.she_function SET data_preview_endpoint = 'she/insights/activity-records' where name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionScreenshots context:structuresonly
+--changeset hubofallthings:sheFunctionScreenshots context:structuresonly runOnChange:true
 
-ALTER TABLE hat.she_function DROP COLUMN logo;
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS logo;
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS graphics;
 ALTER TABLE hat.she_function ADD COLUMN graphics JSONB;
 
 UPDATE hat.she_function SET graphics =
