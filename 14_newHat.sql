@@ -1078,3 +1078,25 @@ VALUES ('data-feed-counter',
 INSERT INTO hat.she_function_status (id, enabled, last_execution, execution_started)
 VALUES ('data-feed-counter', true, null, null);
 
+--changeset hubofallthings:changedSentimentFunctionIcon context:structuresonly
+
+UPDATE hat.she_function
+    SET info.graphics = '
+    {
+      "banner": {
+          "normal": ""
+      },
+      "logo": {
+          "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Image%20from%20iOS%20(5)%20(1).png?raw=true"
+      },
+      "screenshots": [
+          {
+              "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Image%20from%20iOS%20(5)%20(1).png?raw=true"
+          },
+          {
+              "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Image%20from%20iOS%20(5)%20(1).png?raw=true"
+          }
+      ]
+    }'
+    WHERE id = 'sentiment-tracker';
+
