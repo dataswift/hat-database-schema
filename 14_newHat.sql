@@ -685,9 +685,11 @@ ON CONFLICT (name)
       enabled       = TRUE,
       bundle_id     = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionDataPreview context:structuresonly
+--changeset hubofallthings:sheFunctionDataPreview context:structuresonly runOnChange:true
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS data_preview;
 ALTER TABLE hat.she_function ADD COLUMN data_preview JSONB;
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS logo;
 ALTER TABLE hat.she_function ADD COLUMN logo VARCHAR;
 
 UPDATE hat.she_function SET
@@ -768,16 +770,18 @@ data_preview = '[
 ]'
 WHERE name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionDataPreviewEndpoint context:structuresonly
+--changeset hubofallthings:sheFunctionDataPreviewEndpoint context:structuresonly runOnChange:true
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS data_preview_endpoint;
 ALTER TABLE hat.she_function ADD COLUMN data_preview_endpoint VARCHAR;
 
-UPDATE hat.she_function SET data_preview_endpoint = 'she/insights/activity-records' where name = 'data-feed-counter'
+UPDATE hat.she_function SET data_preview_endpoint = 'she/insights/activity-records' where name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionScreenshots context:structuresonly
+--changeset hubofallthings:sheFunctionScreenshots context:structuresonly runOnChange:true
 
-ALTER TABLE hat.she_function DROP COLUMN logo;
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS logo;
 
+ALTER TABLE hat.she_function DROP COLUMN IF EXISTS graphics;
 ALTER TABLE hat.she_function ADD COLUMN graphics JSONB;
 
 UPDATE hat.she_function SET graphics =
@@ -807,10 +811,15 @@ UPDATE hat.she_function SET graphics =
 }'
 WHERE name = 'data-feed-counter';
 
---changeset hubofallthings:sheFunctionName context:structuresonly
+--changeset hubofallthings:sheFunctionName context:structuresonly runOnChange:true splitStatements:false
 
-ALTER TABLE hat.she_function RENAME COLUMN name TO id;
-ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
+DO $$
+BEGIN
+  IF NOT EXISTS(SELECT * FROM information_schema.columns WHERE table_name = 'she_function' and column_name = 'id') THEN
+    ALTER TABLE hat.she_function RENAME COLUMN "name" TO "id";
+    ALTER TABLE hat.she_function ADD COLUMN name VARCHAR NOT NULL DEFAULT('');
+  END IF;
+END $$;
 
 --changeset hubofallthings:uniquenessConstraints context:structuresonly
 
@@ -896,4 +905,176 @@ UPDATE hat.she_function SET graphics =
 	]
 }'
 WHERE id = 'data-feed-counter';
+
+--changeset hubofallthings:sheFunctionMoreDetails context:structuresonly
+
+ALTER TABLE hat.she_function ADD COLUMN version_release_date TIMESTAMPTZ;
+UPDATE hat.she_function SET version_release_date = to_timestamp(1514808000);
+ALTER TABLE hat.she_function ALTER COLUMN version_release_date SET NOT NULL; -- acrobatics to go around Slick's broken support for default timestamp values
+
+ALTER TABLE hat.she_function ADD COLUMN developer_support_email VARCHAR NOT NULL DEFAULT('contact@hatdex.org');
+
+--changeset hubofallthings:sheFunctionDeveloper context:data
+
+ALTER TABLE hat.she_function ALTER COLUMN developer_name SET DEFAULT('HAT Data Exchange Ltd');
+
+UPDATE hat.she_function
+    SET developer_name = 'HAT Data Exchange Ltd'
+    WHERE developer_name = 'HATDeX';
+
+--changeset hubofallthings:hatAppEnabled context:data
+
+INSERT INTO hat.application_status (id, version, enabled)
+VALUES
+  ('hatapp', '1.2.4', true),
+  ('hatappstaging', '1.2.4', true)
+ON CONFLICT DO NOTHING;
+
+--changeset hubofallthings:sheRecreate context:structuresonly
+
+DROP TABLE hat.she_function_status;
+DROP TABLE hat.she_function;
+
+CREATE TABLE hat.she_function
+(
+  id                      VARCHAR     NOT NULL PRIMARY KEY,
+  description             JSONB       NOT NULL,
+  trigger                 JSONB       NOT NULL,
+  bundle_id               VARCHAR     NOT NULL REFERENCES hat.data_bundles (bundle_id),
+  headline                VARCHAR     NOT NULL,
+  data_preview            JSONB,
+  data_preview_endpoint   VARCHAR,
+  graphics                JSONB       NOT NULL,
+  name                    VARCHAR     NOT NULL,
+  version                 VARCHAR     NOT NULL,
+  terms_url               VARCHAR     NOT NULL,
+  developer_id            VARCHAR     NOT NULL,
+  developer_name          VARCHAR     NOT NULL,
+  developer_url           VARCHAR     NOT NULL,
+  developer_country       VARCHAR,
+  version_release_date    TIMESTAMPTZ NOT NULL,
+  developer_support_email VARCHAR     NOT NULL
+);
+
+CREATE TABLE hat.she_function_status (
+  id                VARCHAR NOT NULL PRIMARY KEY,
+  enabled           BOOLEAN NOT NULL,
+  last_execution    TIMESTAMPTZ,
+  execution_started TIMESTAMPTZ
+);
+
+INSERT INTO hat.she_function (id, description, trigger, bundle_id, headline, name, version, terms_url, developer_id, developer_name, developer_url, developer_country, version_release_date, developer_support_email, data_preview, data_preview_endpoint, graphics)
+VALUES ('data-feed-counter',
+  '{"text": "The Weekly Summary show your weekly activities. Weekly summary is private to you, but shareable as data.\\n\\nWeekly summary is powered by SHE, the Smart HAT Engine, the part of your HAT microserver that can install pre-trained analytics and algorithmic functions and outputs the results privately into your HAT."}',
+  '{
+    "period": "P1W",
+    "triggerType": "periodic"
+  }', 'data-feed-counter', 'A summary of your week''s digital activities', 'Weekly Summary', '1.0.0',
+  'https://hatdex.org/terms-of-service-hat-owner-agreement', 'hatdex', 'HAT Data Exchange Ltd', 'https://hatdex.org',
+        null, '2018-01-01 12:00:00.000000', 'contact@hatdex.org',
+        '[
+        {
+              "source": "she",
+              "date": {
+                  "iso": "2018-06-29T06:42:08.414Z",
+                  "unix": 1530254528
+              },
+              "types": [
+                  "insight",
+                  "activity"
+              ],
+              "title": {
+                  "text": "Your recent activity summary",
+                  "subtitle": "21 June 23:00 - 29 June 06:42 GMT",
+                  "action": "insight"
+              },
+              "content": {
+                  "text": "Twitter:\n  Tweets sent: 1\n\nFacebook:\n  Posts composed: 13\n",
+                  "nestedStructure": {
+                      "twitter": [
+                          {
+                              "content": "Tweets sent",
+                              "badge": "1"
+                          }
+                      ],
+                      "facebook": [
+                          {
+                              "content": "Posts composed",
+                              "badge": "13"
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "source": "she",
+              "date": {
+                  "iso": "2018-06-21T23:00:47.319Z",
+                  "unix": 1529622047
+              },
+              "types": [
+                  "insight",
+                  "activity"
+              ],
+              "title": {
+                  "text": "Your recent activity summary",
+                  "subtitle": "18 June 07:50 - 21 June 23:00 GMT",
+                  "action": "insight"
+              },
+              "content": {
+                  "text": "Twitter:\n  Tweets sent: 4\n\nFacebook:\n  Posts composed: 2\n\nNotables:\n  Notes taken: 4\n",
+                  "nestedStructure": {
+                      "twitter": [
+                          {
+                              "content": "Tweets sent",
+                              "badge": "4"
+                          }
+                      ],
+                      "facebook": [
+                          {
+                              "content": "Posts composed",
+                              "badge": "2"
+                          }
+                      ],
+                      "notables": [
+                          {
+                              "content": "Notes taken",
+                              "badge": "4"
+                          }
+                      ]
+                  }
+              }
+          }
+      ]',
+      '/data/she/insights/activity-records',
+        '{
+          "logo": {
+            "normal": "https://static1.squarespace.com/static/5a71ebc8b1ffb68777ca627a/t/5acb4a166d2a73d3a00a10c6/1523272220659/HATAppsstore-rounded.png?format=300w"
+          },
+          "banner": {
+            "normal": ""
+          },
+          "screenshots": [
+            {
+              "normal": "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/cb/01/56/cb0156b7-0cb6-128c-b1ec-fc3c7b31eb87/mzl.xfaethox.png/300x0w.jpg",
+              "large": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/ac/a2/6b/aca26bb8-39dd-1cd9-159d-d37012ffbfeb/mzl.jiaxtegz.png/643x0w.jpg"
+            },
+            {
+              "normal": "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/26/b7/0f/26b70ffa-d9bc-2520-582b-b9a436eb00f5/pr_source.png/300x0w.jpg",
+              "large": "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/9b/2f/68/9b2f6853-ce11-a189-ae41-445e8e7b3248/mzl.fkcehkpp.png/643x0w.jpg"
+            },
+            {
+              "normal": "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/10/df/8f/10df8fae-b2b7-0c93-c530-d6338b1e6bc8/pr_source.png/300x0w.jpg",
+              "large": "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/28/de/7a/28de7aeb-54ed-6692-a63a-8102703361e2/pr_source.png/643x0w.png"
+            },
+            {
+              "normal": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/15/94/30/159430c6-99fc-ee9f-72aa-d46d8436d76c/mzl.dvmpzlje.png/300x0w.jpg",
+              "large": "https://is2-ssl.mzstatic.com/image/thumb/Purple118/v4/11/df/40/11df4050-582a-7598-fe02-b4421a4be818/pr_source.png/643x0w.png"
+            }
+
+          ]
+        }');
+
+INSERT INTO hat.she_function_status (id, enabled, last_execution, execution_started)
+VALUES ('data-feed-counter', true, null, null);
 
