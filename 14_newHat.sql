@@ -1100,3 +1100,25 @@ UPDATE hat.she_function
     }'
     WHERE id = 'sentiment-tracker';
 
+--changeset hubofallthings:changedSentimentFunctionIcon2 context:data
+
+UPDATE hat.she_function
+    SET info.graphics = '
+    {
+      "banner": {
+          "normal": ""
+      },
+      "logo": {
+          "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Image%20from%20iOS%20(5)%20(1).png?raw=true"
+      },
+      "screenshots": [
+          {
+              "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Screenshot%201.jpg?raw=true"
+          },
+          {
+              "normal": "https://github.com/Hub-of-all-Things/exchange-assets/blob/master/Sentiments/Screenshot%202.jpg?raw=true"
+          }
+      ]
+    }'
+    WHERE id = 'sentiment-tracker';
+
