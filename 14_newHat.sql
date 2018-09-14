@@ -1100,3 +1100,106 @@ UPDATE hat.she_function
     }'
     WHERE id = 'sentiment-tracker';
 
+--changeset hubofallthings:sheDataFeedCounterUpdate context:data,testdata
+
+UPDATE hat.data_bundles
+  SET bundle='{
+        "monzo/transactions": {
+            "endpoints": [
+                {
+                    "endpoint": "monzo/transactions"
+                }
+            ],
+            "orderBy": "created",
+            "ordering": "descending"
+        },
+        "calendar/google/events": {
+            "endpoints": [
+                {
+                    "endpoint": "calendar/google/events",
+                    "filters": []
+                },
+                {
+                    "endpoint": "calendar/google/events",
+                    "filters": []
+                }
+            ],
+            "orderBy": "start.dateTime",
+            "ordering": "descending"
+        },
+        "notables/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "rumpel/notablesv1"
+                }
+            ],
+            "orderBy": "created_time",
+            "ordering": "descending"
+        },
+        "fitbit/activity": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/activity"
+                }
+            ],
+            "orderBy": "originalStartTime",
+            "ordering": "descending"
+        },
+        "twitter/tweets": {
+            "endpoints": [
+                {
+                    "endpoint": "twitter/tweets"
+                }
+            ],
+            "orderBy": "lastUpdated",
+            "ordering": "descending"
+        },
+        "fitbit/sleep": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/sleep"
+                }
+            ],
+            "orderBy": "endTime",
+            "ordering": "descending"
+        },
+        "spotify/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "spotify/feed"
+                }
+            ],
+            "orderBy": "played_at",
+            "ordering": "descending"
+        },
+        "facebook/feed": {
+            "endpoints": [
+                {
+                    "endpoint": "facebook/feed"
+                }
+            ],
+            "orderBy": "created_time",
+            "ordering": "descending"
+        },
+        "fitbit/weight": {
+            "endpoints": [
+                {
+                    "endpoint": "fitbit/weight"
+                }
+            ],
+            "orderBy": "date",
+            "ordering": "descending"
+        },
+        "she/insights/emotions": {
+            "endpoints": [
+                {
+                    "endpoint": "she/insights/emotions"
+                }
+            ],
+            "orderBy": "timestamp",
+            "ordering": "descending"
+        }
+  }'
+  WHERE bundle_id='data-feed-counter';
+
+
