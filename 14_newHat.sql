@@ -1202,4 +1202,7 @@ UPDATE hat.data_bundles
   }'
   WHERE bundle_id='data-feed-counter';
 
+--changeset hubofallthings:dataDebitCallback context:structuresonly
+
+ALTER TABLE hat.data_debit ADD COLUMN request_client_callback_url VARCHAR;
 
