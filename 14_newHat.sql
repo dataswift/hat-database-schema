@@ -1206,3 +1206,7 @@ UPDATE hat.data_bundles
 
 ALTER TABLE hat.data_debit ADD COLUMN request_client_callback_url VARCHAR;
 
+--changeset hubofallthings:removeDataDebitCallback context:structuresonly
+
+ALTER TABLE hat.data_debit DROP COLUMN request_client_callback_url;
+
