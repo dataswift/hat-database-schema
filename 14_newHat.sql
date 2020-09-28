@@ -1211,4 +1211,5 @@ ALTER TABLE hat.data_debit ADD COLUMN request_client_callback_url VARCHAR;
 ALTER TABLE hat.data_debit DROP COLUMN request_client_callback_url;
 
 --changeset hubofallthings:userRolesVerified context:data
+
 INSERT INTO hat.user_role_available VALUES ('verified');
