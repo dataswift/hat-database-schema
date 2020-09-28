@@ -89,7 +89,6 @@ INSERT INTO hat.user_role_available VALUES ('datadebit');
 INSERT INTO hat.user_role_available VALUES ('datacredit');
 INSERT INTO hat.user_role_available VALUES ('namespacewrite');
 INSERT INTO hat.user_role_available VALUES ('namespaceread');
-INSERT INTO hat.user_role_available VALUES ('verified');
 
 INSERT INTO hat.user_role SELECT user_id, lower(role), NULL
                           FROM hat.user_user;
@@ -1211,3 +1210,5 @@ ALTER TABLE hat.data_debit ADD COLUMN request_client_callback_url VARCHAR;
 
 ALTER TABLE hat.data_debit DROP COLUMN request_client_callback_url;
 
+--changeset hubofallthings:userRolesVerified context:data
+INSERT INTO hat.user_role_available VALUES ('verified');
